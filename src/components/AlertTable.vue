@@ -81,9 +81,9 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="debug">
       <v-col>
-        <div v-bind:style="{ display: debug }">
+        <div>
           <ul>
             <li>alert host input: {{ alertHostInput }}</li>
             <li>enable polling?: {{ enableTimer }}</li>
@@ -118,7 +118,7 @@ export default {
       unwatchAlertHost: null,
       fromAlertHostInput: false,
       enableTimer: true,
-      debug: 'none' // 'none' or 'block' to appear debug container
+      debug: false
     }
   },
   computed: {

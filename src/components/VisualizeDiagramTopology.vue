@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="debug">
       <v-col>
-        <div v-bind:style="{ display: debug }">
+        <div>
           <ul>
             <li>Topology model: {{ modelFile }}</li>
             <li>Whole layers: {{ wholeLayers }}</li>
@@ -42,7 +42,7 @@ export default {
       unwatchAlert: null,
       unwatchSelectedLayers: null,
       unwatchModelFile: null,
-      debug: 'none' // 'none' or 'block' to appear debug container
+      debug: false
     }
   },
   computed: {

@@ -1,22 +1,17 @@
 <template>
   <v-app id="app">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
-      <AppSelectModel />
-      <AppSelectVisualizer />
-    </v-navigation-drawer>
-
     <v-app-bar
       app
       dark
       dense
     >
-      <v-app-bar-nav-icon v-on:click.stop="drawer = !drawer" />
       <v-toolbar-title>Netoviz</v-toolbar-title>
       <div class="flex-grow-1" />
-      <AppBarLinkSource />
+      <v-toolbar-items>
+        <AppSelectModel />
+        <AppSelectVisualizer />
+        <AppBarLinkSource />
+      </v-toolbar-items>
     </v-app-bar>
 
     <v-content>
@@ -43,11 +38,6 @@ export default {
     AppSelectVisualizer,
     AlertTable,
     VisualizeDiagram
-  },
-  data () {
-    return {
-      drawer: null
-    }
   }
 }
 </script>

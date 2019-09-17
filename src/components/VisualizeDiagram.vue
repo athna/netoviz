@@ -1,11 +1,8 @@
 <template>
   <div id="visualizer-container">
-    <v-row>
+    <v-row v-if="debug">
       <v-col>
-        <div
-          id="visualizer-state-debug"
-          v-bind:style="{ display: debug }"
-        >
+        <div id="visualizer-state-debug">
           <p>
             Visualizer Component (UI Debug)
           </p>
@@ -48,7 +45,7 @@ export default {
   },
   data () {
     return {
-      debug: 'none' // 'none' or 'block' to appear debug container
+      debug: false
     }
   },
   computed: {

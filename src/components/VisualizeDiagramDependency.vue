@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="debug">
       <v-col>
-        <div v-bind:style="{ display: debug }">
+        <div>
           Dependency model: {{ modelFile }} Alert Row:
           {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}
         </div>
@@ -28,7 +28,7 @@ export default {
       visualizer: null,
       unwatchCurrentAlertRow: null,
       unwatchModelFile: null,
-      debug: 'none' // 'none' or 'block' to appear debug container
+      debug: false
     }
   },
   computed: {
