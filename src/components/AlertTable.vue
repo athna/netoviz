@@ -2,28 +2,22 @@
   <div>
     <v-expansion-panels
       accordion
+      focusable
       multiple
       v-bind:value="[0, 1]"
     >
       <!-- 'value' prop: open all panels at default -->
       <v-expansion-panel>
         <v-expansion-panel-header v-slot="{ open }">
-          <v-row>
-            <v-col cols="2">
-              Alert Control
-            </v-col>
-            <v-col
-              cols="8"
-              class="text--secondary"
-            >
-              Timer
-              <span class="setting">{{
-                enableTimer ? 'Enabled' : 'Disabled'
-              }}</span>
-              (Interval
-              <span class="setting">{{ alertPollingInterval }}</span> [sec])
-            </v-col>
-          </v-row>
+          Alert Control
+          <span class="text--secondary text-right pr-4">
+            Timer
+            <span class="setting">{{
+              enableTimer ? 'Enabled' : 'Disabled'
+            }}</span>
+            (Interval
+            <span class="setting">{{ alertPollingInterval }}</span> [sec])
+          </span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-row>
@@ -44,7 +38,6 @@
               <v-text-field
                 v-model="alertHostInput"
                 clearable
-                flat
                 label="Highlight Host"
                 placeholder="Host Name"
                 v-on:input="inputAlertHost"
@@ -62,7 +55,6 @@
             <v-col md="3">
               <v-text-field
                 v-model="alertPollingInterval"
-                flat
                 label="Polling Interval (sec)"
                 type="number"
                 min="1"
@@ -72,7 +64,6 @@
             <v-col md="3">
               <v-text-field
                 v-model="alertLimit"
-                flat
                 label="Polling Logs"
                 type="number"
                 min="1"
@@ -83,18 +74,11 @@
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header v-slot="{ open }">
-          <v-row>
-            <v-col cols="2">
-              Alert Table
-            </v-col>
-            <v-col
-              cols="8"
-              class="text--secondary"
-            >
-              Log updated:
-              <span class="setting">{{ alertUpdatedTime }}</span>
-            </v-col>
-          </v-row>
+          Alert Table
+          <span class="text--secondary text-right pr-4">
+            Log updated:
+            <span class="setting">{{ alertUpdatedTime }}</span>
+          </span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-row>
@@ -108,7 +92,8 @@
                 <template v-slot:item="props">
                   <tr
                     v-bind:class="{
-                      info: props.item.id === currentAlertRow.id
+                      'info font-weight-bold white--text':
+                        props.item.id === currentAlertRow.id
                     }"
                     v-on:click="handleAlertTableCurrentChange(props.item)"
                   >
@@ -360,9 +345,5 @@ export default {
 <style lang="scss" scoped>
 .setting {
   background-color: #fff9c4;
-}
-tr.info {
-  color: white;
-  font-weight: bold;
 }
 </style>
