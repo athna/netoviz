@@ -50,6 +50,8 @@
                 v-on:input="inputAlertHost"
               />
             </v-col>
+          </v-row>
+          <v-row>
             <v-col>
               <v-switch
                 v-model="enableTimer"
@@ -65,6 +67,15 @@
                 type="number"
                 min="1"
                 v-on:change="resetAlertCheckTimer"
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="alertLimit"
+                flat
+                label="Polling Logs"
+                type="number"
+                min="1"
               />
             </v-col>
           </v-row>
