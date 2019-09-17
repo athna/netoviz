@@ -14,10 +14,6 @@
   </v-tooltip>
 </template>
 
-<script>
+<script></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

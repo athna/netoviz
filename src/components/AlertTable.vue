@@ -1,86 +1,129 @@
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <v-btn
-          rounded
-          color="warning"
-          v-bind:disabled="disableClearAlertTableButton"
-          v-on:click="clickClearSelectionButton"
-        >
-          <v-icon left>
-            mdi-notification-clear-all
-          </v-icon>
-          Clear Selection
-        </v-btn>
-      </v-col>
-      <v-col>
-        <v-text-field
-          v-model="alertHostInput"
-          clearable
-          flat
-          label="Highlight Host"
-          placeholder="Host Name"
-          v-on:input="inputAlertHost"
-        />
-      </v-col>
-      <v-col>
-        <v-switch
-          v-model="enableTimer"
-          inset
-          label="Alert Polling"
-        />
-      </v-col>
-      <v-col>
-        <v-text-field
-          v-model="alertPollingInterval"
-          flat
-          label="Polling Interval (sec)"
-          type="number"
-          min="1"
-          v-on:change="resetAlertCheckTimer"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div id="alert-table">
-          <v-data-table
-            dense
-            v-bind:headers="alertTableHeader"
-            v-bind:items="alerts"
-            v-bind:items-per-page="5"
-          >
-            <template v-slot:top>
-              <div id="updated-time">
-                Log updated:
-                <span style="background-color: lightgoldenrodyellow">
-                  {{ alertUpdatedTime }}
-                </span>
-              </div>
-            </template>
-            <template v-slot:item="props">
-              <tr
-                v-bind:class="{ 'info': props.item.id === currentAlertRow.id }"
-                v-on:click="handleAlertTableCurrentChange(props.item)"
+    <v-expansion-panels
+      accordion
+      multiple
+      v-bind:value="[0, 1]"
+    >
+      <!-- 'value' prop: open all panels at default -->
+      <v-expansion-panel>
+        <v-expansion-panel-header v-slot="{ open }">
+          <v-row>
+            <v-col cols="2">
+              Alert Control
+            </v-col>
+            <v-col
+              cols="8"
+              class="text--secondary"
+            >
+              Timer
+              <span class="setting">{{
+                enableTimer ? 'Enabled' : 'Disabled'
+              }}</span>
+              (Interval
+              <span class="setting">{{ alertPollingInterval }}</span> [sec])
+            </v-col>
+          </v-row>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col>
+              <v-btn
+                rounded
+                color="warning"
+                v-bind:disabled="disableClearAlertTableButton"
+                v-on:click="clickClearSelectionButton"
               >
-                <td>{{ props.item.id }}</td>
-                <td>
-                  <v-chip
-                    v-bind:color="severityColor('fill', props.item.severity)"
-                    v-bind:text-color="severityColor('text', props.item.severity)"
+                <v-icon left>
+                  mdi-notification-clear-all
+                </v-icon>
+                Clear Selection
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="alertHostInput"
+                clearable
+                flat
+                label="Highlight Host"
+                placeholder="Host Name"
+                v-on:input="inputAlertHost"
+              />
+            </v-col>
+            <v-col>
+              <v-switch
+                v-model="enableTimer"
+                inset
+                label="Alert Polling"
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="alertPollingInterval"
+                flat
+                label="Polling Interval (sec)"
+                type="number"
+                min="1"
+                v-on:change="resetAlertCheckTimer"
+              />
+            </v-col>
+          </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header v-slot="{ open }">
+          <v-row>
+            <v-col cols="2">
+              Alert Table
+            </v-col>
+            <v-col
+              cols="8"
+              class="text--secondary"
+            >
+              Log updated:
+              <span class="setting">{{ alertUpdatedTime }}</span>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col>
+              <v-data-table
+                dense
+                v-bind:headers="alertTableHeader"
+                v-bind:items="alerts"
+                v-bind:items-per-page="5"
+              >
+                <template v-slot:item="props">
+                  <tr
+                    v-bind:class="{
+                      info: props.item.id === currentAlertRow.id
+                    }"
+                    v-on:click="handleAlertTableCurrentChange(props.item)"
                   >
-                    {{ props.item.severity }}
-                  </v-chip>
-                </td>
-                <td>{{ props.item.host }}</td>
-                <td>{{ props.item.date }}</td>
-              </tr>
-            </template>
-          </v-data-table>
-        </div>
-      </v-col>
-    </v-row>
+                    <td>{{ props.item.id }}</td>
+                    <td>
+                      <v-chip
+                        v-bind:color="
+                          severityColor('fill', props.item.severity)
+                        "
+                        v-bind:text-color="
+                          severityColor('text', props.item.severity)
+                        "
+                      >
+                        {{ props.item.severity }}
+                      </v-chip>
+                    </td>
+                    <td>{{ props.item.host }}</td>
+                    <td>{{ props.item.date }}</td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <v-row v-if="debug">
       <v-col>
         <div>
@@ -214,7 +257,10 @@ export default {
       this.setAlertTableCurrentRow({ id: -1 })
     },
     layerOfAlertHostInput () {
-      if (this.alertHostInput && this.alertHostInput.match(new RegExp('(.+)__(.+)'))) {
+      if (
+        this.alertHostInput &&
+        this.alertHostInput.match(new RegExp('(.+)__(.+)'))
+      ) {
         return this.alertHostInput.split('__').shift()
       }
       return null
@@ -301,6 +347,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.setting {
+  background-color: #fff9c4;
+}
 tr.info {
   color: white;
   font-weight: bold;

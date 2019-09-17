@@ -4,8 +4,8 @@
       <v-col>
         <div>
           Nested model: {{ modelFile }}, Alert Row:
-          {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}, Reverse? :
-          {{ reverse }} Auto Fitting? : {{ autoFitting }}
+          {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}, Reverse?
+          : {{ reverse }} Auto Fitting? : {{ autoFitting }}
         </div>
       </v-col>
     </v-row>
@@ -16,7 +16,6 @@
           inset
           label="Bottom View"
         />
-        <!-- TODO: v-on:change="drawJsonModel()" -->
       </v-col>
       <v-col>
         <v-switch
@@ -24,7 +23,6 @@
           inset
           label="Fit Auto"
         />
-        <!-- TODO: v-on:change="drawJsonModel()" -->
       </v-col>
       <v-col>
         <v-text-field
@@ -32,7 +30,7 @@
           label="Base depth"
           type="number"
           min="1"
-          v-on:change="drawJsonModel()"
+          v-on:input="drawJsonModel()"
         />
       </v-col>
       <v-col>
@@ -73,6 +71,14 @@ export default {
   },
   computed: {
     ...mapGetters(['currentAlertRow', 'modelFile'])
+  },
+  watch: {
+    reverse () {
+      this.drawJsonModel()
+    },
+    autoFitting () {
+      this.drawJsonModel()
+    }
   },
   mounted () {
     console.log('[nested] mounted')

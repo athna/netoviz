@@ -1,6 +1,7 @@
 <template>
   <v-select
     v-model="modelFile"
+    dense
     v-bind:items="models"
     item-text="label"
     item-value="file"
@@ -42,6 +43,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

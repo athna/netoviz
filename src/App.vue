@@ -3,7 +3,6 @@
     <v-app-bar
       app
       dark
-      dense
     >
       <v-toolbar-title>Netoviz</v-toolbar-title>
       <div class="flex-grow-1" />
