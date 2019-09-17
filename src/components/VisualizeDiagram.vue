@@ -1,25 +1,29 @@
 <template>
   <div id="visualizer-container">
-    <div
-      id="visualizer-state-debug"
-      v-bind:style="{ display: debug }"
-    >
-      <p>
-        Visualizer Component (UI Debug)
-      </p>
-      <ul>
-        <li>Visualizer = {{ visualizer }}</li>
-        <li>Model File = {{ modelFile }}</li>
-        <ul>
-          <li
-            v-for="layer in selectedLayers"
-            v-bind:key="layer"
-          >
-            {{ layer }}
-          </li>
-        </ul>
-      </ul>
-    </div>
+    <v-row>
+      <v-col>
+        <div
+          id="visualizer-state-debug"
+          v-bind:style="{ display: debug }"
+        >
+          <p>
+            Visualizer Component (UI Debug)
+          </p>
+          <ul>
+            <li>Visualizer = {{ visualizer }}</li>
+            <li>Model File = {{ modelFile }}</li>
+            <ul>
+              <li
+                v-for="layer in selectedLayers"
+                v-bind:key="layer"
+              >
+                {{ layer }}
+              </li>
+            </ul>
+          </ul>
+        </div>
+      </v-col>
+    </v-row>
     <VisualizeDiagramTopology v-if="visualizer === 'Topology'" />
     <VisualizeDiagramDependency v-else-if="visualizer === 'Dependency'" />
     <VisualizeDiagramDependency2 v-else-if="visualizer === 'Dependency2'" />

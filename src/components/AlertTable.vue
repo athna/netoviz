@@ -1,139 +1,120 @@
 <template>
   <div>
-    <div v-bind:style="{ display: debug }">
-      host (input): {{ alertHost }}, currentAlertRow: {{ currentAlertRow }}
-    </div>
-    <el-collapse v-model="activeNames">
-      <el-collapse-item
-        title="Alert Table Control"
-        name="AlertTableControl"
-      >
-        <el-row v-bind:gutter="10">
-          <el-col v-bind:span="6">
-            <div class="alert-control">
-              Rows :
-              <el-input-number
-                v-model="alertLimit"
-                size="small"
-                controls-position="right"
-                v-bind:min="1"
-                v-bind:max="15"
-                v-on:change="changeTableLineNumber"
-              />
-            </div>
-          </el-col>
-          <el-col v-bind:span="6">
-            <div class="alert-control">
-              <el-button
-                round
-                size="small"
-                type="info"
-                icon="el-icon-delete"
-                v-bind:disabled="disableClearAlertTableButton"
-                v-on:click="clickClearSelectionButton"
-              >
-                Clear selection
-              </el-button>
-            </div>
-          </el-col>
-          <el-col v-bind:span="6">
-            <div class="alert-control">
-              Host to Highlight:
-              <el-input
-                v-model="alertHostInput"
-                class="host-input"
-                clearable
-                placeholder="node OR layer__node"
-                size="small"
-                v-on:input="inputAlertHost"
-              />
-            </div>
-          </el-col>
-        </el-row>
-        <el-row v-bind:gutter="10">
-          <el-col v-bind:span="6">
-            <div class="alert-control">
-              <el-switch
-                v-model="enableTimer"
-                active-text="Enable Timer"
-                inactive-text="Disable Timer"
-                active-color="#409EFF"
-                inactive-color="#ff4949"
-                v-on:change="setAlertCheckTimer()"
-              />
-            </div>
-          </el-col>
-          <el-col v-bind:span="6">
-            <div class="alert-control">
-              Interval(sec) :
-              <el-input-number
-                v-model="alertPollingInterval"
-                size="small"
-                controls-position="right"
-                v-bind:min="1"
-                v-bind:max="30"
-                v-on:change="resetAlertCheckTimer()"
-              />
-            </div>
-          </el-col>
-        </el-row>
-      </el-collapse-item>
-      <el-collapse-item
-        title="Alert Table"
-        name="AlertTable"
-      >
-        <el-table
-          ref="alertTable"
-          highlight-current-row
-          v-bind:data="alerts"
-          v-bind:row-class-name="tableClassSelector"
-          v-on:current-change="handleAlertTableCurrentChange"
+    <v-row>
+      <v-col>
+        <v-btn
+          rounded
+          color="warning"
+          v-bind:disabled="disableClearAlertTableButton"
+          v-on:click="clickClearSelectionButton"
         >
-          <el-table-column
-            prop="id"
-            label="ID"
-            width="100"
-          />
-          <el-table-column
-            prop="severity"
-            label="Severity"
-            width="100"
-          />
-          <el-table-column
-            prop="host"
-            label="Host"
-            width="100"
-          />
-          <el-table-column
-            prop="message"
-            label="Message"
-          />
-          <el-table-column
-            prop="date"
-            label="Date"
-          />
-        </el-table>
-        <div style="text-align:right;">
-          Updated alert table at:
-          <span id="alert-update-time">{{ alertUpdatedTime }}</span>
+          <v-icon left>
+            mdi-notification-clear-all
+          </v-icon>
+          Clear Selection
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-text-field
+          v-model="alertHostInput"
+          clearable
+          flat
+          label="Highlight Host"
+          placeholder="Host Name"
+          v-on:input="inputAlertHost"
+        />
+      </v-col>
+      <v-col>
+        <v-switch
+          v-model="enableTimer"
+          inset
+          label="Alert Polling"
+        />
+      </v-col>
+      <v-col>
+        <v-text-field
+          v-model="alertPollingInterval"
+          flat
+          label="Polling Interval (sec)"
+          type="number"
+          min="1"
+          v-on:change="resetAlertCheckTimer"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div id="alert-table">
+          <v-data-table
+            dense
+            v-bind:headers="alertTableHeader"
+            v-bind:items="alerts"
+            v-bind:items-per-page="5"
+          >
+            <template v-slot:top>
+              <div id="updated-time">
+                Log updated:
+                <span style="background-color: lightgoldenrodyellow">
+                  {{ alertUpdatedTime }}
+                </span>
+              </div>
+            </template>
+            <template v-slot:item="props">
+              <tr
+                v-bind:class="{ 'info': props.item.id === currentAlertRow.id }"
+                v-on:click="handleAlertTableCurrentChange(props.item)"
+              >
+                <td>{{ props.item.id }}</td>
+                <td>
+                  <v-chip
+                    v-bind:color="severityColor('fill', props.item.severity)"
+                    v-bind:text-color="severityColor('text', props.item.severity)"
+                  >
+                    {{ props.item.severity }}
+                  </v-chip>
+                </td>
+                <td>{{ props.item.host }}</td>
+                <td>{{ props.item.date }}</td>
+              </tr>
+            </template>
+          </v-data-table>
         </div>
-      </el-collapse-item>
-    </el-collapse>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div v-bind:style="{ display: debug }">
+          <ul>
+            <li>alert host input: {{ alertHostInput }}</li>
+            <li>enable polling?: {{ enableTimer }}</li>
+            <li>polling interval: {{ alertPollingInterval }}</li>
+            <li>current alert row: {{ currentAlertRow }}</li>
+          </ul>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 import { debounce } from 'debounce'
+import colors from 'vuetify/lib/util/colors'
+
 export default {
   data () {
     return {
-      activeNames: ['AlertTable', 'AlertTableControl'],
       alerts: [],
-      alertLimit: 5,
+      alertLimit: 15,
       alertPollingInterval: 10, // default: 10sec
       alertCheckTimer: null,
       alertUpdatedTime: null,
       alertHostInput: '',
+      alertTableHeader: [
+        { text: 'ID', sortable: true, value: 'id' },
+        { text: 'Severity', sortable: true, value: 'severity' },
+        { text: 'Host', sortable: true, value: 'host' },
+        { text: 'Date', sortable: true, value: 'date' }
+      ],
       unwatchAlertHost: null,
       fromAlertHostInput: false,
       enableTimer: true,
@@ -161,6 +142,11 @@ export default {
       return (
         this.currentAlertRow && Object.keys(this.currentAlertRow).length < 1
       )
+    }
+  },
+  watch: {
+    enableTimer () {
+      this.setAlertCheckTimer()
     }
   },
   mounted () {
@@ -206,9 +192,6 @@ export default {
         this.setAlertTableCurrentRow(this.alerts[0])
       })
     },
-    changeTableLineNumber () {
-      this.requestAlertData()
-    },
     async requestAlertData () {
       try {
         // console.log('[AlertTable] request alert data')
@@ -226,33 +209,19 @@ export default {
         console.error('fetch alert failed: ', error)
       }
     },
-    tableClassSelector (row) {
-      const severity = row.row.severity
-      const severityRegexp = new RegExp(severity, 'i')
-      const severities = [
-        'disaster',
-        'high',
-        'average',
-        'warning',
-        'information'
-      ]
-      if (severities.find(s => s.match(severityRegexp))) {
-        return `${severity.toLowerCase()}-row`
-      }
-      return 'not-classified-row'
-    },
     clickClearSelectionButton () {
       this.alertHostInput = ''
-      this.setAlertTableCurrentRow({})
+      this.setAlertTableCurrentRow({ id: -1 })
     },
     layerOfAlertHostInput () {
-      if (this.alertHostInput.match(new RegExp('(.+)__(.+)'))) {
+      if (this.alertHostInput && this.alertHostInput.match(new RegExp('(.+)__(.+)'))) {
         return this.alertHostInput.split('__').shift()
       }
       return null
     },
     alertFromAlertHostInput () {
       const alert = {
+        id: -1, // clear alert table selection
         message: 'selected directly',
         severity: 'information',
         date: new Date().toISOString(),
@@ -268,18 +237,14 @@ export default {
     inputAlertHost: debounce(function () {
       // NOTICE: do not use arrow-function for debounce.
       this.fromAlertHostInput = true
-      // clear table selection
-      this.setAlertTableCurrentRow({})
       // set dummy alert to redraw diagram.
       this.setAlertTableCurrentRow(this.alertFromAlertHostInput())
       this.fromAlertHostInput = false
     }, 500), // 0.5sec
     setAlertTableCurrentRow (row) {
       // console.log('[AlertTable] set alert table current row: ', row)
-
-      // it fire current-change event on alertTable,
-      // so called handleAlertTableCurrentChange in continuity.
-      this.$refs.alertTable.setCurrentRow(row)
+      this.alertHostInput = row.host || ''
+      this.currentAlertRow = row
     },
     handleAlertTableCurrentChange (row) {
       // console.log('[AlertTable] handle current change: ', row)
@@ -294,62 +259,50 @@ export default {
       if (row && Object.keys(row).length > 0) {
         this.currentAlertRow = row
       }
+    },
+    severityColor (prop, severity) {
+      const colorTable = [
+        {
+          severity: 'disaster',
+          fill: colors.red.lighten1, // bright red
+          text: colors.grey.lighten5
+        },
+        {
+          severity: 'high',
+          fill: colors.red.darken4, // red
+          text: colors.grey.lighten5
+        },
+        {
+          severity: 'average',
+          fill: colors.orange.lighten1, // orange
+          text: colors.grey.darken4
+        },
+        {
+          severity: 'warning',
+          fill: colors.yellow.accent3, // bright yellow
+          text: colors.grey.darken4
+        },
+        {
+          severity: 'information',
+          fill: colors.lightGreen.darken1, // bright green
+          text: colors.grey.lighten5
+        }
+      ]
+      const defaultColorInfo = {
+        severity: 'default',
+        fill: colors.grey.darken1, // grey
+        text: colors.grey.lighten5
+      }
+      const colorInfo = colorTable.find(d => d.severity === severity)
+      return colorInfo ? colorInfo[prop] : defaultColorInfo[prop]
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.el-button {
-  margin-left: 10px;
-}
-.el-row {
-  margin-bottom: 15px;
-}
-.host-input {
-  width: 180px;
-}
-.alert-control {
-  background-color: transparent; // change some color to check layout
-}
-.el-table /deep/ {
-  table {
-    border-collapse: collapse;
-  }
-  th,
-  td {
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-  }
-  .disaster-row {
-    background-color: lightpink; // bright red
-  }
-  .high-row {
-    background-color: mistyrose; // red
-  }
-  .average-row {
-    background-color: palegoldenrod; // orange
-  }
-  .warning-row {
-    background-color: lightyellow; // bright yellow
-  }
-  .information-row {
-    background-color: honeydew; // bright green
-  }
-  .not-classified-row {
-    background-color: lightgray; // grey
-  }
-  .current-row {
-    td {
-      background-color: inherit;
-    }
-    border: 2px solid #b71001;
-    font-weight: bold;
-    text-decoration: underline;
-  }
-}
-#alert-update-time {
-  background-color: lightgoldenrodyellow;
-  color: #303030;
+tr.info {
+  color: white;
+  font-weight: bold;
 }
 </style>
