@@ -27,7 +27,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-row>
-            <v-col>
+            <v-col md="3">
               <v-btn
                 rounded
                 color="warning"
@@ -40,7 +40,7 @@
                 Clear Selection
               </v-btn>
             </v-col>
-            <v-col>
+            <v-col md="3">
               <v-text-field
                 v-model="alertHostInput"
                 clearable
@@ -52,14 +52,14 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col md="3">
               <v-switch
                 v-model="enableTimer"
                 inset
                 label="Alert Polling"
               />
             </v-col>
-            <v-col>
+            <v-col md="3">
               <v-text-field
                 v-model="alertPollingInterval"
                 flat
@@ -69,7 +69,7 @@
                 v-on:change="resetAlertCheckTimer"
               />
             </v-col>
-            <v-col>
+            <v-col md="3">
               <v-text-field
                 v-model="alertLimit"
                 flat
