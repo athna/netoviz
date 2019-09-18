@@ -4,7 +4,6 @@ import About from './views/About'
 import TableDiagrams from './views/TableDiagrams'
 import TableVisualizers from './views/TableVisualizers'
 import TableModels from './views/TableModels'
-import VisualizeDiagram from './views/VisualizeDiagram'
 
 Vue.use(Router)
 
@@ -40,12 +39,12 @@ export default new Router({
     },
     {
       path: '/visualizer/:visualizer/:modelFile',
-      component: VisualizeDiagram,
+      component: () => import(/* webpackChunkName: "viz" */ './views/VisualizeDiagram.vue'),
       props: true
     },
     {
       path: '/target/:modelFile/:visualizer',
-      component: VisualizeDiagram,
+      component: () => import(/* webpackChunkName: "viz" */ './views/VisualizeDiagram.vue'),
       props: true
     }
   ]
