@@ -20,6 +20,7 @@
           v-bind:items="wholeLayers"
           chips
           multiple
+          v-on:change="displaySelectedLayers"
         />
       </v-col>
     </v-row>
@@ -34,6 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { select } from 'd3-selection'
 import TopoGraphVisualizer from '../graph/topology/visualizer'
 import '../css/topology.scss'
 
@@ -57,10 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentAlertRow',
-      'wholeLayers'
-    ]),
+    ...mapGetters(['currentAlertRow']),
     notSelectedLayers () {
       return this.wholeLayers.filter(
         // <0: index not found: not exist in selected layers
@@ -107,21 +106,21 @@ export default {
   methods: {
     setLayerDisplayStyle (layers, display) {
       for (const layer of layers) {
-        const elm = document.getElementById(`${layer}-container`)
-        if (elm) {
-          elm.style.display = display
-        }
+        select(`[id='${layer}-container']`).style('display', display)
       }
     },
     drawJsonModel () {
-      this.visualizer.drawJsonModel(this.modelFile, this.currentAlertRow)
-      // When the visualizer draws topology graph,
-      // vue doesn't wait SVG DOM rendering and run next setLayerDisplayStyle().
-      // so, these setLayerDisplayStyle() could not found target layer container
-      // WORKAROUND :
-      //   FORCE to select all layers
-      //   to avoid mismatch between UI (layer selector) and Graph.
-      this.selectedLayers = this.wholeLayers
+      const getLayerNames = graphs => {
+        // When the visualizer draws topology graph,
+        // vue doesn't wait SVG DOM rendering and run next setLayerDisplayStyle().
+        // so, these setLayerDisplayStyle() could not found target layer container
+        // WORKAROUND :
+        //   FORCE to select all layers
+        //   to avoid mismatch between UI (layer selector) and Graph.
+        this.wholeLayers = graphs.map(layer => layer.name)
+        this.selectedLayers = this.wholeLayers
+      }
+      this.visualizer.drawJsonModel(this.modelFile, this.currentAlertRow, getLayerNames)
       this.displaySelectedLayers()
     },
     displaySelectedLayers () {

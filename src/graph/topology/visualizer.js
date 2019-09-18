@@ -14,7 +14,7 @@ export default class GraphVisualizer extends BaseContainer {
     this.graphVisualizers = []
   }
 
-  drawJsonModel (jsonName, alert) {
+  drawJsonModel (jsonName, alert, graphsCallBack) {
     json(`/graph/topology/${jsonName}`).then(
       graphData => {
         // graph object data to draw converted from topology json
@@ -28,6 +28,8 @@ export default class GraphVisualizer extends BaseContainer {
         interval(() => {
           this.positionCache.saveGraphs(this.storageKey, this.graphs)
         }, 5000)
+        // hook before draw
+        graphsCallBack(graphData)
         // draw
         this.drawGraphs()
         this.highlightByAlert(alert)
