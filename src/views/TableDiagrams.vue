@@ -33,12 +33,14 @@ export default {
     ...mapGetters(['modelFiles', 'visualizers']),
     headers () {
       const head = [{ text: 'Model', value: 'model', link: '' }]
-      return head.concat(this.visualizers.map(v => ({
-        text: v.text,
-        value: v.value,
-        sortable: false,
-        link: `/visualizer/${v.value}`
-      })))
+      return head.concat(
+        this.visualizers.map(v => ({
+          text: v.text,
+          value: v.value,
+          sortable: false,
+          link: `/visualizer/${v.value}`
+        }))
+      )
     },
     diagrams () {
       const rows = []
@@ -65,6 +67,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

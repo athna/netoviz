@@ -4,7 +4,9 @@
       <v-list>
         <v-subheader>
           Models
-          <span v-show="visualizer">&nbsp;with {{ visualizer }} visualizer</span>
+          <span
+            v-show="visualizer"
+          >&nbsp;with {{ visualizer }} visualizer</span>
         </v-subheader>
         <v-list-item-group>
           <v-list-item
@@ -46,6 +48,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

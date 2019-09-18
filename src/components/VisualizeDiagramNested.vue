@@ -6,7 +6,10 @@
           visualize diagram nested
           <ul>
             <li>Nested model: {{ modelFile }}</li>
-            <li>Alert Row: {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}</li>
+            <li>
+              Alert Row:
+              {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}
+            </li>
             <li>Reverse? : {{ reverse }} Auto Fitting? : {{ autoFitting }}</li>
           </ul>
         </div>

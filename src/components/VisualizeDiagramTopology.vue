@@ -120,7 +120,11 @@ export default {
         this.wholeLayers = graphs.map(layer => layer.name)
         this.selectedLayers = this.wholeLayers
       }
-      this.visualizer.drawJsonModel(this.modelFile, this.currentAlertRow, getLayerNames)
+      this.visualizer.drawJsonModel(
+        this.modelFile,
+        this.currentAlertRow,
+        getLayerNames
+      )
       this.displaySelectedLayers()
     },
     displaySelectedLayers () {

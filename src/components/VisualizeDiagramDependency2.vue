@@ -6,7 +6,10 @@
           visualize diagram dependency2
           <ul>
             <li>model: {{ modelFile }}</li>
-            <li>Alert Row: {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}</li>
+            <li>
+              Alert Row:
+              {{ currentAlertRow ? currentAlertRow.id : 'NOT selected' }}
+            </li>
           </ul>
         </div>
       </v-col>
