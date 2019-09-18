@@ -16,7 +16,7 @@
     <v-content>
       <v-container fluid>
         <AlertTable />
-        <VisualizeDiagram />
+        <router-view />
       </v-container>
     </v-content>
   </v-app>
@@ -27,7 +27,6 @@ import AppBarLinkSource from './components/AppBarLinkSource'
 import AppSelectModel from './components/AppSelectModel'
 import AppSelectVisualizer from './components/AppSelectVisualizer'
 import AlertTable from './components/AlertTable'
-import VisualizeDiagram from './components/VisualizeDiagram'
 
 export default {
   name: 'App',
@@ -35,8 +34,7 @@ export default {
     AppBarLinkSource,
     AppSelectModel,
     AppSelectVisualizer,
-    AlertTable,
-    VisualizeDiagram
+    AlertTable
   }
 }
 </script>
