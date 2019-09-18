@@ -52,7 +52,7 @@ export default {
       unwatchSelectedLayers: null,
       unwatchModelFile: null,
       selectedLayers: [],
-      debug: false
+      debug: true
     }
   },
   computed: {

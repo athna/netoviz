@@ -2,13 +2,14 @@
   <v-app id="app">
     <v-app-bar
       app
+      dense
       dark
     >
       <v-toolbar-title>Netoviz</v-toolbar-title>
       <div class="flex-grow-1" />
       <v-toolbar-items>
-        <AppSelectModel />
-        <AppSelectVisualizer />
+        <AppMenuModels />
+        <AppMenuVisualizers />
         <AppBarLinkSource />
       </v-toolbar-items>
     </v-app-bar>
@@ -24,16 +25,16 @@
 
 <script>
 import AppBarLinkSource from './components/AppBarLinkSource'
-import AppSelectModel from './components/AppSelectModel'
-import AppSelectVisualizer from './components/AppSelectVisualizer'
+import AppMenuModels from './components/AppMenuModels'
+import AppMenuVisualizers from './components/AppMenuVisualizers'
 import AlertTable from './components/AlertTable'
 
 export default {
   name: 'App',
   components: {
     AppBarLinkSource,
-    AppSelectModel,
-    AppSelectVisualizer,
+    AppMenuModels,
+    AppMenuVisualizers,
     AlertTable
   }
 }

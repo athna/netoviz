@@ -8,13 +8,12 @@
         </v-subheader>
         <v-list-item-group>
           <v-list-item
-            v-for="(vizData, i) in visualizerData"
-            v-bind:key="i"
+            v-for="(vizData, index) in visualizerData"
+            v-bind:key="index"
+            v-bind:to="vizData.link"
           >
             <v-list-item-content>
-              <router-link v-bind:to="vizData.link">
-                {{ vizData.text }}
-              </router-link>
+              {{ vizData.text }}
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

@@ -1,12 +1,29 @@
 <template>
-  <v-select
-    v-model="modelFile"
-    dense
-    v-bind:items="models"
-    item-text="label"
-    item-value="file"
-    label="Model"
-  />
+  <v-menu
+    open-on-hover
+    offset-y
+  >
+    <template v-slot:activator="{ on }">
+      <v-btn
+        flat
+        v-on="on"
+      >
+        Models
+        <v-icon right>
+          mdi-menu-down
+        </v-icon>
+      </v-btn>
+    </template>
+    <v-list>
+      <v-list-item
+        v-for="(model, index) in models"
+        v-bind:key="index"
+        v-bind:to="`/target/${model.file}`"
+      >
+        {{ model.label }}
+      </v-list-item>
+    </v-list>
+  </v-menu>
 </template>
 
 <script>
@@ -14,16 +31,6 @@ export default {
   data () {
     return {
       models: []
-    }
-  },
-  computed: {
-    modelFile: {
-      get () {
-        return this.$store.getters.modelFile
-      },
-      set (value) {
-        this.$store.dispatch('updateModelFile', value)
-      }
     }
   },
   mounted () {

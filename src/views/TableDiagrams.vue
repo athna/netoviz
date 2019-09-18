@@ -3,14 +3,15 @@
     <v-col>
       <v-data-table
         caption="Select model/visualizer"
+        dense
         v-bind:headers="headers"
         v-bind:items="diagrams"
       >
         <template v-slot:item="props">
           <tr>
             <td
-              v-for="col in Object.keys(props.item)"
-              v-bind:key="col"
+              v-for="(col, index) in Object.keys(props.item)"
+              v-bind:key="index"
             >
               <router-link v-bind:to="props.item[col].link">
                 {{ props.item[col].text }}
