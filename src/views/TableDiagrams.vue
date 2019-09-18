@@ -12,7 +12,9 @@
               v-for="col in Object.keys(props.item)"
               v-bind:key="col"
             >
-              <a v-bind:href="props.item[col].link">{{ props.item[col].text }}</a>
+              <router-link v-bind:to="props.item[col].link">
+                {{ props.item[col].text }}
+              </router-link>
             </td>
           </tr>
         </template>

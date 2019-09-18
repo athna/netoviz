@@ -37,6 +37,16 @@ export default new Router({
       path: '/visualizer/:visualizer',
       component: TableModels,
       props: true
+    },
+    {
+      path: '/visualizer/:visualizer/:modelFile',
+      component: VisualizeDiagramTopology,
+      props: true
+    },
+    {
+      path: '/target/:modelFile/:visualizer',
+      component: VisualizeDiagramTopology,
+      props: true
     }
   ]
 })

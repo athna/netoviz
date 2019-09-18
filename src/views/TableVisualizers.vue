@@ -10,10 +10,11 @@
           <v-list-item
             v-for="(vizData, i) in visualizerData"
             v-bind:key="i"
-            v-bind:href="vizData.link"
           >
             <v-list-item-content>
-              {{ vizData.text }}
+              <router-link v-bind:to="vizData.link">
+                {{ vizData.text }}
+              </router-link>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

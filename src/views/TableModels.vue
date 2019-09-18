@@ -10,9 +10,10 @@
           <v-list-item
             v-for="(mData, i) in modelData"
             v-bind:key="i"
-            v-bind:href="mData.link"
           >
-            {{ mData.text }}
+            <router-link v-bind:to="mData.link">
+              {{ mData.text }}
+            </router-link>
           </v-list-item>
         </v-list-item-group>
       </v-list>
