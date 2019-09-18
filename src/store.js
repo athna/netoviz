@@ -10,7 +10,6 @@ export default new Vuex.Store({
     visualizer: 'Dependency2',
     modelFile: '', // not selected
     wholeLayers: [],
-    selectedLayers: [],
     currentAlertRow: { id: -1 },
     alertHost: ''
   },
@@ -20,9 +19,6 @@ export default new Vuex.Store({
     },
     setModelFile (state, payload) {
       state.modelFile = payload
-    },
-    setSelectedLayers (state, payload) {
-      state.selectedLayers = payload
     },
     setWholeLayers (state, payload) {
       state.wholeLayers = payload
@@ -41,9 +37,6 @@ export default new Vuex.Store({
     modelFile (state) {
       return state.modelFile
     },
-    selectedLayers (state) {
-      return state.selectedLayers
-    },
     wholeLayers (state) {
       return state.wholeLayers
     },
@@ -60,9 +53,6 @@ export default new Vuex.Store({
       commit('setModelFile', payload)
       dispatch('initializeLayersFromModelFile')
     },
-    selectAllLayers ({ getters, commit }) {
-      commit('setSelectedLayers', getters.wholeLayers)
-    },
     initializeLayersFromModelFile ({ getters, commit }) {
       const modelFile = getters.modelFile
       json(`/graph/topology/${modelFile}`).then(
@@ -70,7 +60,6 @@ export default new Vuex.Store({
           // graph object data to draw converted from topology json
           const layers = modelData.map(d => d.name)
           commit('setWholeLayers', layers)
-          commit('setSelectedLayers', layers)
         },
         error => {
           throw error

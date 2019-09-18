@@ -15,7 +15,7 @@ export default class GraphVisualizer extends BaseContainer {
   }
 
   drawJsonModel (jsonName, alert) {
-    json(`graph/topology/${jsonName}`).then(
+    json(`/graph/topology/${jsonName}`).then(
       graphData => {
         // graph object data to draw converted from topology json
         this.graphs = graphData

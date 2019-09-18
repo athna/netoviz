@@ -3,6 +3,7 @@
     <v-row v-if="debug">
       <v-col>
         <div>
+          visualize diagram topology
           <ul>
             <li>Topology model: {{ modelFile }}</li>
             <li>Whole layers: {{ wholeLayers }}</li>
@@ -32,36 +33,33 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import TopoGraphVisualizer from '../graph/topology/visualizer'
 import '../css/topology.scss'
 
 export default {
+  props: {
+    modelFile: {
+      type: String,
+      default: '',
+      require: true
+    }
+  },
   data () {
     return {
       visualizer: null,
       unwatchAlert: null,
       unwatchSelectedLayers: null,
       unwatchModelFile: null,
+      selectedLayers: [],
       debug: false
     }
   },
   computed: {
     ...mapGetters([
       'currentAlertRow',
-      'modelFile',
-      'selectedLayers',
-      'wholeLayers',
-      'visualizer'
+      'wholeLayers'
     ]),
-    selectedLayers: {
-      get () {
-        return this.$store.getters.selectedLayers
-      },
-      set (value) {
-        this.$store.commit('setSelectedLayers', value)
-      }
-    },
     notSelectedLayers () {
       return this.wholeLayers.filter(
         // <0: index not found: not exist in selected layers
@@ -106,7 +104,6 @@ export default {
     this.unwatchModelFile()
   },
   methods: {
-    ...mapActions(['selectAllLayers']),
     setLayerDisplayStyle (layers, display) {
       for (const layer of layers) {
         const elm = document.getElementById(`${layer}-container`)
@@ -123,7 +120,7 @@ export default {
       // WORKAROUND :
       //   FORCE to select all layers
       //   to avoid mismatch between UI (layer selector) and Graph.
-      this.selectAllLayers()
+      this.selectedLayers = this.wholeLayers
       this.displaySelectedLayers()
     },
     displaySelectedLayers () {

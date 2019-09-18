@@ -4,7 +4,7 @@ import About from './views/About'
 import TableDiagrams from './views/TableDiagrams'
 import TableVisualizers from './views/TableVisualizers'
 import TableModels from './views/TableModels'
-import VisualizeDiagramTopology from './components/VisualizeDiagramTopology'
+import VisualizeDiagram from './views/VisualizeDiagram'
 
 Vue.use(Router)
 
@@ -40,12 +40,12 @@ export default new Router({
     },
     {
       path: '/visualizer/:visualizer/:modelFile',
-      component: VisualizeDiagramTopology,
+      component: VisualizeDiagram,
       props: true
     },
     {
       path: '/target/:modelFile/:visualizer',
-      component: VisualizeDiagramTopology,
+      component: VisualizeDiagram,
       props: true
     }
   ]
