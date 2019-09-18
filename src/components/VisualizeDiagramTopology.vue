@@ -53,8 +53,8 @@ export default {
       unwatchAlert: null,
       unwatchSelectedLayers: null,
       unwatchModelFile: null,
-      wholeLayers: [], // TODO: layer selection
-      selectedLayers: [], // TODO: layer selection
+      wholeLayers: [],
+      selectedLayers: [],
       debug: false
     }
   },
