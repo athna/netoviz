@@ -64,6 +64,7 @@ export default {
     }
   },
   mounted () {
+    // TODO: models data must be managed by Vuex
     this.getModels()
   },
   methods: {
@@ -73,7 +74,7 @@ export default {
         this.models = await response.json()
         this.modelFile = this.models[0].file // default
       } catch (error) {
-        console.log('[SelectModel] Cannot get models data: ', error)
+        console.log('[TableDiagrams] Cannot get models data: ', error)
       }
     }
   }
