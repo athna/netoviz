@@ -5,7 +5,6 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        flat
         v-on="on"
       >
         Visualizers

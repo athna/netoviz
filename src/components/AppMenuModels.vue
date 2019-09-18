@@ -5,7 +5,6 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        flat
         v-on="on"
       >
         Models
@@ -16,36 +15,28 @@
     </template>
     <v-list>
       <v-list-item
-        v-for="(model, index) in models"
+        v-for="(modelFile, index) in modelFiles"
         v-bind:key="index"
-        v-bind:to="`/target/${model.file}`"
+        v-bind:to="`/target/${modelFile.file}`"
       >
-        {{ model.label }}
+        {{ modelFile.label }}
       </v-list-item>
     </v-list>
   </v-menu>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  data () {
-    return {
-      models: []
-    }
+  computed: {
+    ...mapGetters(['modelFiles'])
   },
   mounted () {
-    this.getModels()
+    this.updateModelFiles()
   },
   methods: {
-    async getModels () {
-      try {
-        const response = await fetch('/models')
-        this.models = await response.json()
-        this.modelFile = this.models[0].file // default
-      } catch (error) {
-        console.log('[SelectModel] Cannot get models data: ', error)
-      }
-    }
+    ...mapActions(['updateModelFiles'])
   }
 }
 </script>

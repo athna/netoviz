@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'TableVisualizers',
   props: {
@@ -32,18 +34,14 @@ export default {
       required: false
     }
   },
-  data () {
-    return {
-      visualizers: ['Topology', 'Dependency', 'Dependency2', 'Nested']
-    }
-  },
   computed: {
+    ...mapGetters(['visualizers']),
     visualizerData () {
       return this.visualizers.map(v => ({
-        text: v,
+        text: v.text,
         link: this.modelFile
-          ? `/target/${this.modelFile}/${v.toLowerCase()}`
-          : `/visualizer/${v.toLowerCase()}`
+          ? `/target/${this.modelFile}/${v.value}`
+          : `/visualizer/${v.value}`
       }))
     }
   }
