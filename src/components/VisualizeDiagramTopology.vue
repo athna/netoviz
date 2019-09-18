@@ -55,7 +55,7 @@ export default {
       unwatchModelFile: null,
       wholeLayers: [], // TODO: layer selection
       selectedLayers: [], // TODO: layer selection
-      debug: true
+      debug: false
     }
   },
   computed: {
