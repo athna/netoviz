@@ -14,7 +14,12 @@
     </v-row>
     <v-row>
       <v-col>
-        <AppSelectLayer />
+        <v-select
+          v-model="selectedLayers"
+          v-bind:items="wholeLayers"
+          chips
+          multiple
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -28,14 +33,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import AppSelectLayer from './AppSelectLayer'
 import TopoGraphVisualizer from '../graph/topology/visualizer'
 import '../css/topology.scss'
 
 export default {
-  components: {
-    AppSelectLayer
-  },
   data () {
     return {
       visualizer: null,
@@ -50,8 +51,17 @@ export default {
       'currentAlertRow',
       'modelFile',
       'selectedLayers',
-      'wholeLayers'
+      'wholeLayers',
+      'visualizer'
     ]),
+    selectedLayers: {
+      get () {
+        return this.$store.getters.selectedLayers
+      },
+      set (value) {
+        this.$store.commit('setSelectedLayers', value)
+      }
+    },
     notSelectedLayers () {
       return this.wholeLayers.filter(
         // <0: index not found: not exist in selected layers
@@ -62,6 +72,7 @@ export default {
   mounted () {
     console.log('[topo] mounted')
     this.visualizer = new TopoGraphVisualizer()
+    this.selectedLayers = this.wholeLayers
 
     this.drawJsonModel()
     this.unwatchAlert = this.$store.watch(
